@@ -12,7 +12,6 @@ import java.net.InetAddress
  */
 class TelloCommand {
 
-    // TODO: Get this to connect to drone, test takeOff() and land() first
     private val ip = InetAddress.getByName("192.168.10.1")
     private val port = 8889
     private val socket = DatagramSocket(port)
@@ -157,7 +156,7 @@ class TelloCommand {
 
         var response = "ERROR"
 
-        val job = GlobalScope.launch(Dispatchers.Main) {
+        val job = GlobalScope.launch {
             val receiveData = ByteArray(1024)
             val sendData = command.toByteArray()
 

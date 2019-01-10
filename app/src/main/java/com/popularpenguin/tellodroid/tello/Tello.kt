@@ -19,23 +19,21 @@ class Tello {
     private val state = TelloState()
     // TODO: Add video stream here
 
-    private lateinit var controller: Controller
+    private val controller = XboxController()
 
     private var telloCommand = "NULL"
 
-    init {
-        controller = XboxController()
-    }
-
     fun connect() {
-        GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch {
             command.connect()
-            state.connect()
+            //state.connect()
         }
     }
 
     fun sendCommand(cmd: String) {
-
+        GlobalScope.launch {
+            command.sendCommand(cmd)
+        }
     }
 
     fun onKeyDown(keyCode: Int, event: KeyEvent) {
