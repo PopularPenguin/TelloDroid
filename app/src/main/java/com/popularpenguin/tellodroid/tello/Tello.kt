@@ -39,7 +39,9 @@ class Tello {
     fun onKeyDown(keyCode: Int, event: KeyEvent) {
         if (event.source and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD) {
             telloCommand = controller.processDigital(keyCode)
-            //command.sendCommand(telloCommand)
+            GlobalScope.launch {
+                command.sendCommand(telloCommand)
+            }
         }
     }
 
