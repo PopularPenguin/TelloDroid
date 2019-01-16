@@ -17,38 +17,52 @@ class MainActivity : AppCompatActivity() {
 
         tello = Tello()
 
+        tello.subscribeToLog(logView)
+
         // TODO: Buttons are for testing only, maybe leave a land or emergency button on phone
         connectButton.setOnClickListener { tello.connect() }
 
-        takeOffButton.setOnClickListener {
-            tello.sendCommand("takeoff")
-        }
+        takeOffButton.setOnClickListener { tello.takeOff() }
 
-        landButton.setOnClickListener {
-            tello.sendCommand("land")
-        }
+        landButton.setOnClickListener { tello.land() }
 
-        emergencyButton.setOnClickListener {
-            tello.sendCommand("emergency")
-        }
+        ccwButton.setOnClickListener { tello.rotate(-45) }
+
+        cwButton.setOnClickListener { tello.rotate(45) }
+
+        upButton.setOnClickListener { tello.up(20) }
+
+        downButton.setOnClickListener { tello.down(20) }
+
+        forwardButton.setOnClickListener { tello.forward(20) }
+
+        backButton.setOnClickListener { tello.back(20) }
+
+        leftButton.setOnClickListener { tello.left(20) }
+
+        rightButton.setOnClickListener { tello.right(20) }
+
+        flipButton.setOnClickListener { tello.flip("r") }
+
+        emergencyButton.setOnClickListener { tello.emergency() }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         tello.onKeyDown(keyCode, event)
 
-        return super.onKeyDown(keyCode, event)
+        return true
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         tello.onKeyUp(keyCode, event)
 
-        return super.onKeyUp(keyCode, event)
+        return true
     }
 
     override fun onGenericMotionEvent(event: MotionEvent): Boolean {
         tello.onMotionEvent(event)
 
-        return super.onGenericMotionEvent(event)
+        return true
     }
 
     override fun onDestroy() {

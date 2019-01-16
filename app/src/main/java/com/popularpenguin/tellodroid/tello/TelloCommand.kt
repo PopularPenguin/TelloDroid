@@ -10,7 +10,7 @@ import java.net.InetAddress
 /**
  * UDP Client for sending and receiving commands
  */
-class TelloCommand {
+class TelloCommand { // TODO: Rename TelloClient?
 
     private val ip = InetAddress.getByName("192.168.10.1")
     private val port = 8889
@@ -18,88 +18,15 @@ class TelloCommand {
 
     @Throws(Exception::class)
     suspend fun connect() {
+        if (isConnected()) {
+            return
+        }
+
         socket.connect(ip, port)
         sendCommand("command")
     }
 
-    suspend fun takeOff(): String = sendCommand("takeoff")
-
-    suspend fun land(): String = sendCommand("land")
-
-    // Stop all motors immediately
-    suspend fun emergency(): String = sendCommand("emergency")
-
-    // Fly up 20-500 cm
-    suspend fun up(distance: Int): String {
-        if (distance !in 20..500) {
-            throw IllegalArgumentException("Invalid distance: Must be in range 20 - 500")
-        }
-
-        return sendCommand("up $distance")
-    }
-
-    // Fly down 20-500 cm
-    suspend fun down(distance: Int): String {
-        if (distance !in 20..500) {
-            throw IllegalArgumentException("Invalid distance: Must be in range 20 - 500")
-        }
-
-        return sendCommand("down $distance")
-    }
-
-    // Fly left 20-500 cm
-    suspend fun left(distance: Int): String {
-        if (distance !in 20..500) {
-            throw IllegalArgumentException("Invalid distance: Must be in range 20 - 500")
-        }
-
-        return sendCommand("left $distance")
-    }
-
-    // Fly right 20-500 cm
-    suspend fun right(distance: Int): String {
-        if (distance !in 20..500) {
-            throw IllegalArgumentException("Invalid distance: Must be in range 20 - 500")
-        }
-
-        return sendCommand("right $distance")
-    }
-
-    // Fly forward 20-500 cm
-    suspend fun forward(distance: Int): String {
-        if (distance !in 20..500) {
-            throw IllegalArgumentException("Invalid distance: Must be in range 20 - 500")
-        }
-
-        return sendCommand("forward $distance")
-    }
-
-    // Fly back 20-500 cm
-    suspend fun back(distance: Int): String {
-        if (distance !in 20..500) {
-            throw IllegalArgumentException("Invalid distance: Must be in range 20 - 500")
-        }
-
-        return sendCommand("back $distance")
-    }
-
-    // Rotate clockwise 1-3600 degrees
-    suspend fun rotateClockwise(degrees: Int): String {
-        if (degrees !in 1..3600) {
-            throw IllegalArgumentException("Invalid degrees: Must be in range 1 - 3600")
-        }
-
-        return sendCommand("cw $degrees")
-    }
-
-    // Rotate counter-clockwise 1-3600 degrees
-    suspend fun rotateCounterClockwise(degrees: Int): String {
-        if (degrees !in 1..3600) {
-            throw IllegalArgumentException("Invalid degrees: Must be in range 1 - 3600")
-        }
-
-        return sendCommand("ccw $degrees")
-    }
+    // TODO: Move these over to the Tello class
 
     // Flip in a direction
     suspend fun flip(direction: Direction): String = sendCommand("flip ${direction.str}")

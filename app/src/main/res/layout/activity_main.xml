@@ -5,14 +5,15 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="false"
         tools:context=".MainActivity">
-
 
     <Button
             android:text="Take Off"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/takeOffButton"
+            android:focusable="false"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toTopOf="@+id/landButton"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
@@ -21,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/landButton"
+            android:focusable="false"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/takeOffButton"
             app:layout_constraintStart_toStartOf="@+id/takeOffButton"
             app:layout_constraintEnd_toEndOf="@+id/takeOffButton"/>
@@ -28,12 +30,96 @@
             android:text="Connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:focusable="false"
             android:id="@+id/connectButton" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
     <Button
             android:text="Shut down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:focusable="false"
             android:id="@+id/emergencyButton" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
+    <Button
+            android:text="CCW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/ccwButton" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/cwButton"
+            app:layout_constraintTop_toBottomOf="@+id/takeOffButton"
+            app:layout_constraintBottom_toTopOf="@+id/landButton"/>
+    <Button
+            android:text="CW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/cwButton" app:layout_constraintStart_toEndOf="@+id/ccwButton"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/takeOffButton"
+            app:layout_constraintBottom_toTopOf="@+id/landButton"/>
+    <TextView
+            android:text="Log"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/logView" app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/landButton"/>
+    <Button
+            android:text="Forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/forwardButton" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"/>
+    <Button
+            android:text="Back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/backButton" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/forwardButton"
+            app:layout_constraintStart_toStartOf="@+id/forwardButton"/>
+    <Button
+            android:text="Left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/leftButton" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/rightButton"
+            app:layout_constraintTop_toTopOf="@+id/rightButton"
+            app:layout_constraintBottom_toBottomOf="@+id/rightButton"/>
+    <Button
+            android:text="Right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/rightButton" app:layout_constraintStart_toEndOf="@+id/leftButton"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/backButton"/>
+    <Button
+            android:text="Up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/upButton" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/landButton"/>
+    <Button
+            android:text="Down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:id="@+id/downButton" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/upButton" app:layout_constraintStart_toStartOf="@+id/upButton"
+    />
+    <Button
+            android:text="Flip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/flipButton"
+            android:focusable="false"
+            app:layout_constraintEnd_toEndOf="@+id/connectButton"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/connectButton"/>
 </android.support.constraint.ConstraintLayout>
