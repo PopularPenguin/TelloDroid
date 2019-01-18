@@ -39,7 +39,7 @@ class Tello {
     fun connect() { // TODO: Fix crash on first launch
         GlobalScope.launch(Dispatchers.IO) {
             command.connect()
-            //state.connect()
+            getState()
 
             log.add("Connecting\n")
 
@@ -68,16 +68,17 @@ class Tello {
         }
     }
 
-    // TODO: Add a view and test
-    private fun getState(cmd: String) {
+    // TODO: Parse out invalid strings being returned (ok and error from other commands)
+    private fun getState() {
         GlobalScope.launch(Dispatchers.Main) {
             while(command.isConnected()) {
                 batteryState = command.sendCommand("battery?")
                 speedState = command.sendCommand("speed?")
                 timeState = command.sendCommand("time?")
-                stateView.text = "Battery: $batteryState, Speed: $speedState, Time: $timeState"
 
-                delay(2000L)
+                stateView.text = "Battery: $batteryState\nSpeed: $speedState\nTime: $timeState"
+
+                delay(4000L)
             }
         }
     }

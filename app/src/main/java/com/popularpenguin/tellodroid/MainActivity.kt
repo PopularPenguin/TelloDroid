@@ -15,9 +15,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        tello = Tello()
-
-        tello.subscribeToLog(logView)
+        tello = Tello().apply {
+            subscribeToLog(logView)
+            subscribeToState(stateView)
+        }
 
         // TODO: Buttons are for testing only, maybe leave a land or emergency button on phone
         connectButton.setOnClickListener { tello.connect() }

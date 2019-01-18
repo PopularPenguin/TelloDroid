@@ -65,7 +65,7 @@
             android:focusable="false"
             android:id="@+id/logView" app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/landButton"/>
+    />
     <Button
             android:text="Forward"
             android:layout_width="wrap_content"
@@ -122,4 +122,10 @@
             android:focusable="false"
             app:layout_constraintEnd_toEndOf="@+id/connectButton"
             android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/connectButton"/>
+    <TextView
+            android:text="State"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stateView" app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/logView"/>
 </android.support.constraint.ConstraintLayout>

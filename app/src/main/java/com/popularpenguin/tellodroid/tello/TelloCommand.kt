@@ -93,7 +93,7 @@ class TelloCommand { // TODO: Rename TelloClient?
                 val receivePacket = DatagramPacket(receiveData, receiveData.size)
                 socket.receive(receivePacket)
 
-                receivePacket.data.toString()
+                String(receivePacket.data)
             } catch (e: SocketException) {
                 connect()
 
