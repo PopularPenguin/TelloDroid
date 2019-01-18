@@ -6,6 +6,7 @@ import java.lang.Exception
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+import java.net.SocketException
 
 /**
  * UDP Client for sending and receiving commands
@@ -14,15 +15,14 @@ class TelloCommand { // TODO: Rename TelloClient?
 
     private val ip = InetAddress.getByName("192.168.10.1")
     private val port = 8889
-    private val socket = DatagramSocket(port)
+    private var socket = DatagramSocket(port)
 
     @Throws(Exception::class)
     suspend fun connect() {
-        if (isConnected()) {
-            return
+        if (!socket.isConnected) {
+            socket.connect(ip, port)
         }
 
-        socket.connect(ip, port)
         sendCommand("command")
     }
 
@@ -71,7 +71,6 @@ class TelloCommand { // TODO: Rename TelloClient?
     }
 
     // TODO: Implement read commands
-
     @Throws(IOException::class)
     suspend fun sendCommand(command: String): String {
         if (command.isEmpty()) {
@@ -81,7 +80,7 @@ class TelloCommand { // TODO: Rename TelloClient?
             return "Disconnected"
         }
 
-        var response = "ERROR"
+        var response = ""
 
         val job = GlobalScope.launch {
             val receiveData = ByteArray(1024)
@@ -90,10 +89,16 @@ class TelloCommand { // TODO: Rename TelloClient?
             val sendPacket = DatagramPacket(sendData, sendData.size, ip, port)
             socket.send(sendPacket)
 
-            val receivePacket = DatagramPacket(receiveData, receiveData.size)
-            socket.receive(receivePacket)
+            response = try {
+                val receivePacket = DatagramPacket(receiveData, receiveData.size)
+                socket.receive(receivePacket)
 
-            response = receivePacket.data.toString()
+                receivePacket.data.toString()
+            } catch (e: SocketException) {
+                connect()
+
+                "SocketException"
+            }
         }
 
         job.join()

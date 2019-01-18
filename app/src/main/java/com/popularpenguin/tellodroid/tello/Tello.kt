@@ -1,5 +1,6 @@
 package com.popularpenguin.tellodroid.tello
 
+import android.util.Log
 import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -7,7 +8,10 @@ import android.widget.TextView
 import com.popularpenguin.tellodroid.controller.XboxController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketException
 import kotlin.math.abs
 
 /**
@@ -15,31 +19,66 @@ import kotlin.math.abs
  */
 class Tello {
 
+    private val TAG = "TELLO_LOG"
     // TODO: Move individual commands to this class
     private val command = TelloCommand()
     private val state = TelloState()
+    @Volatile private var isReady = false
     // TODO: Add video stream here
 
     private val controller = XboxController(this)
 
+    private var batteryState = ""
+    private var speedState = ""
+    private var timeState = ""
+    private lateinit var stateView: TextView
+
     private var log = mutableListOf<String>()
     private lateinit var logView: TextView
 
-    fun connect() {
+    fun connect() { // TODO: Fix crash on first launch
         GlobalScope.launch(Dispatchers.IO) {
             command.connect()
             //state.connect()
 
             log.add("Connecting\n")
+
+            isReady = true
         }
     }
 
     private fun sendCommand(cmd: String) {
+        if (!isReady) {
+            return
+        }
+
+        isReady = false
+
         GlobalScope.launch(Dispatchers.Main) {
-            command.sendCommand(cmd)
+            try {
+                command.sendCommand(cmd)
+            } catch (e : IOException) {
+                Log.e(TAG, e.toString())
+            }
 
             log.add("$cmd\n")
             printLog()
+
+            isReady = true
+        }
+    }
+
+    // TODO: Add a view and test
+    private fun getState(cmd: String) {
+        GlobalScope.launch(Dispatchers.Main) {
+            while(command.isConnected()) {
+                batteryState = command.sendCommand("battery?")
+                speedState = command.sendCommand("speed?")
+                timeState = command.sendCommand("time?")
+                stateView.text = "Battery: $batteryState, Speed: $speedState, Time: $timeState"
+
+                delay(2000L)
+            }
         }
     }
 
@@ -57,6 +96,7 @@ class Tello {
         controller.processAnalog(event)
     }
 
+    // Control commands /////////////////////////////////////////////////////////////////////
     fun takeOff() { sendCommand("takeoff") }
 
     fun land() { sendCommand("land") }
@@ -140,7 +180,6 @@ class Tello {
 
     // TODO: Put in the rest of the commands
 
-
     fun close() {
         command.close()
         state.close()
@@ -149,18 +188,14 @@ class Tello {
     private fun printLog() {
         logView.text = ""
 
-        if (log.size <= 5) {
-            log.forEach {
-                logView.append(it)
-            }
-        }
-        else {
-            for (i in 1..5) {
-                logView.append(log[log.size - i])
-            }
-        }
+        logView.text = log.last()
     }
+
     fun subscribeToLog(view: TextView) {
         logView = view
+    }
+
+    fun subscribeToState(view: TextView) {
+        stateView = view
     }
 }

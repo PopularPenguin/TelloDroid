@@ -30,17 +30,17 @@ class MainActivity : AppCompatActivity() {
 
         cwButton.setOnClickListener { tello.rotate(45) }
 
-        upButton.setOnClickListener { tello.up(20) }
+        upButton.setOnClickListener { tello.up(30) }
 
-        downButton.setOnClickListener { tello.down(20) }
+        downButton.setOnClickListener { tello.down(30) }
 
-        forwardButton.setOnClickListener { tello.forward(20) }
+        forwardButton.setOnClickListener { tello.forward(30) }
 
-        backButton.setOnClickListener { tello.back(20) }
+        backButton.setOnClickListener { tello.back(30) }
 
-        leftButton.setOnClickListener { tello.left(20) }
+        leftButton.setOnClickListener { tello.left(30) }
 
-        rightButton.setOnClickListener { tello.right(20) }
+        rightButton.setOnClickListener { tello.right(30) }
 
         flipButton.setOnClickListener { tello.flip("r") }
 

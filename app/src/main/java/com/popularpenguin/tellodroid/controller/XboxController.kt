@@ -23,32 +23,72 @@ class XboxController(private val tello: Tello) : Controller {
         const val START = 103
     }
 
+    private val degrees = 45
+    private val distance = 40
+
     override fun processAnalog(event: MotionEvent) {
-        // TODO: Return the command string from a when block
         // TODO: Need to spawn coroutines so I can poll multiple sticks and triggers at once?
 
         // Left Stick
         when (event.x) {
-            // ...
+            in -1.0f..-0.9f -> {
+                tello.rotate(-degrees)
+                return
+            }
+            in 0.9f..1.0f -> {
+                tello.rotate(degrees)
+                return
+            }
         }
         when (event.y) {
-            //in 0.5f..1.0f -> up(event.y) // TODO: Check to ensure axis isn't inverted
-           // in -0.5f..-1.0f -> down(event.y) // TODO: Check to ensure axis isn't inverted
+            in -1.0f..-0.9f -> {
+                tello.up(distance)
+                return
+            }
+            in 0.9f..1.0f -> {
+                tello.down(distance)
+            }
         }
 
-        // TODO: Remove this if block
+        // Right stick
+        when (event.getAxisValue(MotionEvent.AXIS_RX)) {
+            in -1.0f..-0.9f -> {
+                tello.left(distance)
+                return
+            }
+            in 0.9f..1.0f -> {
+                tello.right(distance)
+                return
+            }
+        }
+        when (event.getAxisValue(MotionEvent.AXIS_RY)) {
+            in -1.0f..-0.9f -> {
+                tello.forward(distance)
+                return
+            }
+            in 0.9f..1.0f -> {
+                tello.back(distance)
+                return
+            }
+        }
+
+        // Left trigger
         if (event.getAxisValue(MotionEvent.AXIS_Z) == 1.0f) {
-
+            // TODO: Assign button
         }
+
+        // Right trigger
+        if (event.getAxisValue(MotionEvent.AXIS_RZ) == 1.0f) {
+            // TODO: Assign button
+        }
+
     }
 
     override fun processDigital(keyCode: Int) {
-        // TODO: Return the command string from a when block
        when (keyCode) {
            A -> tello.land()
            Y -> tello.takeOff()
-           X -> tello.rotate(-45) // TODO: Placeholder, move to left d-pad after testing
-           B -> tello.rotate(45) // TODO: Placeholder, move to left d-pad after testing
+           B -> tello.connect()
 
            // ...
         }
