@@ -11,7 +11,7 @@ import java.net.SocketException
 /**
  * UDP Client for sending and receiving commands
  */
-class TelloCommand { // TODO: Rename TelloClient?
+class TelloClient {
 
     private val ip = InetAddress.getByName("192.168.10.1")
     private val port = 8889

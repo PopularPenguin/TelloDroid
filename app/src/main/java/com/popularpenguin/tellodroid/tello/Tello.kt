@@ -11,7 +11,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.net.SocketException
 import kotlin.math.abs
 
 /**
@@ -21,8 +20,7 @@ class Tello {
 
     private val TAG = "TELLO_LOG"
     // TODO: Move individual commands to this class
-    private val command = TelloCommand()
-    private val state = TelloState()
+    private val client = TelloClient()
     @Volatile private var isReady = false
     // TODO: Add video stream here
 
@@ -38,7 +36,7 @@ class Tello {
 
     fun connect() { // TODO: Fix crash on first launch
         GlobalScope.launch(Dispatchers.IO) {
-            command.connect()
+            client.connect()
             getState()
 
             log.add("Connecting\n")
@@ -56,7 +54,7 @@ class Tello {
 
         GlobalScope.launch(Dispatchers.Main) {
             try {
-                command.sendCommand(cmd)
+                client.sendCommand(cmd)
             } catch (e : IOException) {
                 Log.e(TAG, e.toString())
             }
@@ -71,12 +69,13 @@ class Tello {
     // TODO: Parse out invalid strings being returned (ok and error from other commands)
     private fun getState() {
         GlobalScope.launch(Dispatchers.Main) {
-            while(command.isConnected()) {
-                batteryState = command.sendCommand("battery?")
-                speedState = command.sendCommand("speed?")
-                timeState = command.sendCommand("time?")
+            while(client.isConnected()) {
+                batteryState = client.sendCommand("battery?")
+                //speedState = client.sendCommand("speed?")
+                //timeState = client.sendCommand("time?")
 
-                stateView.text = "Battery: $batteryState\nSpeed: $speedState\nTime: $timeState"
+                if (batteryState != "ok") stateView.text = "Battery: $batteryState"
+                //stateView.text = "Battery: $batteryState\nSpeed: $speedState\nTime: $timeState"
 
                 delay(4000L)
             }
@@ -182,8 +181,7 @@ class Tello {
     // TODO: Put in the rest of the commands
 
     fun close() {
-        command.close()
-        state.close()
+        client.close()
     }
 
     private fun printLog() {
