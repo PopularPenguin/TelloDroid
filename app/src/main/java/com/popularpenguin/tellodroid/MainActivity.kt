@@ -1,7 +1,7 @@
 package com.popularpenguin.tellodroid
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.MotionEvent
 import com.popularpenguin.tellodroid.tello.Tello

@@ -1,8 +1,8 @@
 package com.popularpenguin.tellodroid.tello
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
-import java.lang.Exception
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -70,7 +70,7 @@ class TelloClient {
         return sendCommand("wifi $ssid $password")
     }
 
-    // TODO: Implement read commands
+    /** @return The Tello's response to the sent command (ok, error, or a state variable */
     @Throws(IOException::class)
     suspend fun sendCommand(command: String): String {
         if (command.isEmpty()) {
@@ -80,16 +80,14 @@ class TelloClient {
             return "Disconnected"
         }
 
-        var response = ""
-
-        val job = GlobalScope.launch {
+        return withContext(Dispatchers.IO) {
             val receiveData = ByteArray(1024)
             val sendData = command.toByteArray()
 
             val sendPacket = DatagramPacket(sendData, sendData.size, ip, port)
             socket.send(sendPacket)
 
-            response = try {
+            try {
                 val receivePacket = DatagramPacket(receiveData, receiveData.size)
                 socket.receive(receivePacket)
 
@@ -100,10 +98,6 @@ class TelloClient {
                 "SocketException"
             }
         }
-
-        job.join()
-
-        return response
     }
 
     fun isConnected(): Boolean = socket.isConnected
