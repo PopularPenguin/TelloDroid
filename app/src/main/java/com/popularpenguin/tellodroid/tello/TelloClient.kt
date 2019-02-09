@@ -1,6 +1,7 @@
 package com.popularpenguin.tellodroid.tello
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.DatagramPacket
@@ -16,6 +17,9 @@ class TelloClient {
     private val ip = InetAddress.getByName("192.168.10.1")
     private val port = 8889
     private var socket = DatagramSocket(port)
+
+    @Volatile
+    private var queuedCommands = 0 // Number of commands sent to Tello
 
     @Throws(Exception::class)
     suspend fun connect() {
@@ -73,11 +77,19 @@ class TelloClient {
     /** @return The Tello's response to the sent command (ok, error, or a state variable */
     @Throws(IOException::class)
     suspend fun sendCommand(command: String): String {
+        queuedCommands++
+
         if (command.isEmpty()) {
             return "Empty command"
         }
         if (!socket.isConnected) {
             return "Disconnected"
+        }
+
+        while (queuedCommands > 3) {
+            delay(50)
+
+            if (queuedCommands <= 3) break
         }
 
         return withContext(Dispatchers.IO) {
@@ -90,6 +102,8 @@ class TelloClient {
             try {
                 val receivePacket = DatagramPacket(receiveData, receiveData.size)
                 socket.receive(receivePacket)
+
+                queuedCommands--
 
                 String(receivePacket.data)
             } catch (e: SocketException) {

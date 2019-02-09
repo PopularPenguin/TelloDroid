@@ -27,49 +27,24 @@ class XboxController(private val tello: Tello) : Controller {
     private val distance = 40
 
     override fun processAnalog(event: MotionEvent) {
-        // TODO: Need to spawn coroutines so I can poll multiple sticks and triggers at once?
-
         // Left Stick
         when (event.x) {
-            in -1.0f..-0.9f -> {
-                tello.rotate(-degrees)
-                return
-            }
-            in 0.9f..1.0f -> {
-                tello.rotate(degrees)
-                return
-            }
+            in -1.0f..-0.9f -> tello.rotate(-degrees)
+            in 0.9f..1.0f -> tello.rotate(degrees)
         }
         when (event.y) {
-            in -1.0f..-0.9f -> {
-                tello.up(distance)
-                return
-            }
-            in 0.9f..1.0f -> {
-                tello.down(distance)
-            }
+            in -1.0f..-0.9f -> tello.up(distance)
+            in 0.9f..1.0f -> tello.down(distance)
         }
 
         // Right stick
         when (event.getAxisValue(MotionEvent.AXIS_RX)) {
-            in -1.0f..-0.9f -> {
-                tello.left(distance)
-                return
-            }
-            in 0.9f..1.0f -> {
-                tello.right(distance)
-                return
-            }
+            in -1.0f..-0.9f -> tello.left(distance)
+            in 0.9f..1.0f -> tello.right(distance)
         }
         when (event.getAxisValue(MotionEvent.AXIS_RY)) {
-            in -1.0f..-0.9f -> {
-                tello.forward(distance)
-                return
-            }
-            in 0.9f..1.0f -> {
-                tello.back(distance)
-                return
-            }
+            in -1.0f..-0.9f -> tello.forward(distance)
+            in 0.9f..1.0f -> tello.back(distance)
         }
 
         // Left trigger

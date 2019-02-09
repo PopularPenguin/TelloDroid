@@ -34,7 +34,7 @@ class Tello {
     private var log = mutableListOf<String>()
     private lateinit var logView: TextView
 
-    fun connect() { // TODO: Fix crash on first launch
+    fun connect() {
         GlobalScope.launch(Dispatchers.IO) {
             client.connect()
             getState()
@@ -46,12 +46,6 @@ class Tello {
     }
 
     private fun sendCommand(cmd: String) {
-        if (!isReady) {
-            return
-        }
-
-        isReady = false
-
         GlobalScope.launch(Dispatchers.Main) {
             try {
                 client.sendCommand(cmd)
@@ -61,12 +55,9 @@ class Tello {
 
             log.add("$cmd\n")
             printLog()
-
-            isReady = true
         }
     }
 
-    // TODO: Parse out invalid strings being returned (ok and error from other commands)
     private fun getState() {
         GlobalScope.launch(Dispatchers.Main) {
             while(client.isConnected()) {
@@ -89,7 +80,7 @@ class Tello {
     }
 
     fun onKeyUp(keyCode: Int, event: KeyEvent) {
-        // TODO: Probably don't have to do anything in this function
+        // Probably don't have to do anything in this function
     }
 
     fun onMotionEvent(event: MotionEvent) {
